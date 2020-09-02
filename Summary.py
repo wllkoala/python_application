@@ -13,7 +13,7 @@ def sort_resetIndex(df, Transaction_Type):
     return data
 
 
-def cal_time(data_old, data_new, deliver_Accept_Name):
+def cal_time(data_old, data_new, column_name):
     times_Cal = []
     for i in data_old.index.values:
         data_new_Isin = data_new[(data_new['Order Number'].isin([data_old['Order Number'].iloc[i]])) & (
@@ -29,7 +29,7 @@ def cal_time(data_old, data_new, deliver_Accept_Name):
             time_Cal = [time_Item[0], time_OrderNUmber[0], time_Line[0],
                         time_Old_Date, time_New_Date[0], time_new_old[0]]
             times_Cal.append(time_Cal)
-    timedf = pd.DataFrame(times_Cal, columns=deliver_Accept_Name)
+    timedf = pd.DataFrame(times_Cal, columns=column_name)
     print(timedf)
     return timedf
 
@@ -61,10 +61,10 @@ accept_Receive_Name = ['Item', 'Order Number', 'Line',
 timedf_Accept_Receive = cal_time(
     data_Receive, data_Accept, accept_Receive_Name)
 # 计算Accept到Deliver时间
-deliver_Accept_Name = ['Item', 'Order Number', 'Line',
+column_name = ['Item', 'Order Number', 'Line',
                        "Accept Date", "Deliver Date", 'Accept to deliver time']
 timedf_Deliver_Accept = cal_time(
-    data_Accept, data_Deliver, deliver_Accept_Name)
+    data_Accept, data_Deliver, column_name)
 # 写入Excel
 writer = pd.ExcelWriter('Summary.xlsx')
 df.to_excel(writer, sheet_name='1', index=False)
